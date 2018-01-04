@@ -7,7 +7,7 @@
 <form name="ParametersForm">
 <!--Rad=<input type="text" name="R" value="50">-->
 <br>
-D1 =<input type="text" name="D1" value="25">
+D1 =<input type="text" name="D1" value="15">
 <br>
 D2 =<input type="text" name="D2" value="30">
 </form>
@@ -78,7 +78,7 @@ D2 =<input type="text" name="D2" value="30">
 
       C2d.lineWidth=1;
       C2d.moveTo(centerOfQuadrant,0);
-      C2d.lineTo(centerOfQuadrant,canvasHeight);
+      C2d.lineTo(centerOfQuadrant,canvasHeight/2);
       C2d.stroke();
       C2d.setLineDash([]);
     // draw rectangle with D1 and D2 values
@@ -182,34 +182,80 @@ D2 =<input type="text" name="D2" value="30">
     C2d.setLineDash([]);
     var centerOfTopLine = d11/2;
     var lengthOfLeftLine = d8;
-    var centerOfSecondLine = d4/2;
+    var centerOfSecondLine = d11-d4;
     var some = (d11 -  d8);
 
     C2d.moveTo(centerOfQuadrant - centerOfTopLine,lowestLevel);
     C2d.lineTo(centerOfQuadrant + centerOfTopLine,lowestLevel);
     C2d.stroke();
+
+    C2d.setLineDash([]);
     //C2d.rect(centerOfQuadrant - centerOfTopLine, marginTop, d1, d2);
     //C2d.stroke();
     //
     lowestLevel += d10;
+
     C2d.beginPath();
     C2d.moveTo(centerOfQuadrant - centerOfSecondLine,lowestLevel);
     C2d.lineTo(centerOfQuadrant + centerOfSecondLine,lowestLevel);
     C2d.stroke();
     //
-
     C2d.beginPath();
     C2d.moveTo(centerOfQuadrant - some,lowestLevel);
     C2d.lineTo(centerOfQuadrant - some,lowestLevel+50);
     C2d.stroke();
+
+    C2d.beginPath();
+    C2d.moveTo(centerOfQuadrant + some,lowestLevel);
+    C2d.lineTo(centerOfQuadrant + some,lowestLevel+50);
+    C2d.stroke();
+
+    C2d.beginPath();
+    C2d.moveTo(centerOfQuadrant - centerOfSecondLine,lowestLevel+50);
+    C2d.lineTo(centerOfQuadrant + centerOfSecondLine,lowestLevel+50);
+    C2d.stroke();
     /*lowestLevel += d10;
+
     C2d.beginPath();
     C2d.moveTo(centerOfQuadrant - centerOfSecondLine,lowestLevel);
     C2d.lineTo(centerOfQuadrant + centerOfSecondLine,lowestLevel);
     C2d.stroke();*/
     // bottom line
+
+    lowestLevel+=25;
+
     C2d.beginPath();
-    lowestLevel += 60;
+    C2d.arc(centerOfQuadrant,lowestLevel,d1,0,2*Math.PI);
+    C2d.stroke();
+
+    C2d.beginPath();
+    C2d.setLineDash([20,3,2,3]);
+    C2d.lineWidth=1;
+    C2d.moveTo(0, lowestLevel);
+    C2d.lineTo(canvasWidth/2,lowestLevel);
+    C2d.stroke();
+
+    C2d.beginPath();
+    C2d.setLineDash([10,10]);
+    C2d.lineWidth=1;
+    C2d.moveTo(0, lowestLevel- d1);
+    C2d.lineTo(canvasWidth/2,lowestLevel - d1);
+    C2d.stroke();
+
+    C2d.beginPath();
+    C2d.setLineDash([10,10]);
+    C2d.stroke();
+
+    C2d.lineWidth=1;
+    C2d.moveTo(0, lowestLevel + d1);
+    C2d.lineTo(canvasWidth/2,lowestLevel+ d1);
+    C2d.stroke();
+    C2d.setLineDash([]);
+
+    C2d.beginPath();
+    lowestLevel += 40;
+
+
     C2d.moveTo(centerOfQuadrant - centerOfTopLine,lowestLevel);
     C2d.lineTo(centerOfQuadrant + centerOfTopLine,lowestLevel);
     C2d.stroke();
