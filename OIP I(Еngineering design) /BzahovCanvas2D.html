@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bojidar Zahov OИП 2D</title>
+</head>
+<body>
+<form name="ParametersForm">
+<!--Rad=<input type="text" name="R" value="50">-->
+<br>
+D1 =<input type="text" name="D1" value="25">
+<br>
+D2 =<input type="text" name="D2" value="30">
+</form>
+<button onclick="draw();"> DRAW </button>
+<button onclick="clearCanvas();"> CLEAR </button>
+<button onclick="commit();"> COMMIT </button>
+<br>
+<canvas id="Canvas1" width="400" height="400"
+  style="border:1px solid #0000FF;">
+  Use other Browser!!!
+</canvas>
+
+<script>
+  var Can1=document.getElementById("Canvas1");
+  var C2d=Can1.getContext("2d");
+  var canvasWidth = Can1.width;
+  var canvasHeight = Can1.width;
+  var d1; // input from user
+  var d2; // input from user
+  var d3 = 42;
+  var d4 = 52;
+  var d5 = 15;
+  var d6 = 25;
+  var d7 = 30;
+  var d8 = 60;
+  var d9 = 30;
+  var d10 = 15;
+  var d11 = 86;
+
+  draw();
+
+  function commit(){
+    d1=document.ParametersForm.D1.value*1;
+    d2=document.ParametersForm.D2.value*1;
+  }
+
+  function clearCanvas(){
+    C2d.clearRect(0, 0, Can1.width, Can1.height);
+    drawDelimetersLines();
+  }
+
+  function drawDelimetersLines(){
+    C2d.beginPath();
+    C2d.setLineDash([]);
+    C2d.moveTo(canvasWidth/2,0);
+    C2d.lineTo(canvasHeight/2,canvasHeight);
+    C2d.stroke();
+
+
+    C2d.beginPath();
+    C2d.setLineDash([]);
+    C2d.moveTo(canvasWidth,canvasHeight/2);
+    C2d.lineTo(0,canvasWidth/2);
+    C2d.stroke();
+  }
+
+  function drawRightLook(){
+    var marginTop = 10;
+    var centerOfTopLine = d11/2;
+    var lowestLevel = marginTop;
+    var centerOfQuadrant = canvasWidth * 0.75;
+    var centerOfBaseLine = d8;
+    var some = centerOfBaseLine - centerOfTopLine;
+
+    // vertical ----- - ----- at center
+      C2d.beginPath();
+      C2d.setLineDash([20,3,2,3]);
+
+      C2d.lineWidth=1;
+      C2d.moveTo(centerOfQuadrant,0);
+      C2d.lineTo(centerOfQuadrant,canvasHeight);
+      C2d.stroke();
+      C2d.setLineDash([]);
+    // draw rectangle with D1 and D2 values
+      C2d.beginPath();
+      C2d.setLineDash([]);
+      var centerOfRectangle = d1/2;
+      C2d.rect(centerOfQuadrant - centerOfRectangle, marginTop, d1, d2);
+      C2d.stroke();
+      lowestLevel+= d2;
+      C2d.setLineDash([]);
+    // draw d3 _________
+      C2d.beginPath();
+      var centerOfFirsLine = d3/2;
+      C2d.moveTo(centerOfQuadrant - centerOfFirsLine,lowestLevel);
+      C2d.lineTo(centerOfQuadrant + centerOfFirsLine,lowestLevel);
+      C2d.stroke();
+      //draw d5
+      //
+        C2d.beginPath();
+        C2d.setLineDash([]);
+        C2d.moveTo(centerOfQuadrant - centerOfFirsLine,lowestLevel + d5);
+        C2d.lineTo(centerOfQuadrant - centerOfFirsLine,lowestLevel);
+        C2d.stroke();
+      //
+        C2d.setLineDash([]);
+        C2d.beginPath();
+        C2d.moveTo(centerOfQuadrant + centerOfFirsLine,lowestLevel+d5);
+        C2d.lineTo(centerOfQuadrant + centerOfFirsLine,lowestLevel);
+        C2d.stroke();
+        lowestLevel += d5;
+      //
+
+        C2d.setLineDash([]);
+        C2d.beginPath();
+      //  var centerOfSecondLine = (centerOfFirsLine + centerOfBaseLine)/2;
+        //C2d.moveTo(centerOfQuadrant + d8 - centerOfFirsLine,lowestLevel);
+        //C2d.lineTo(centerOfQuadrant + centerOfFirsLine,lowestLevel);
+        //C2d.stroke();
+      //
+        C2d.moveTo(centerOfQuadrant - d8/2,lowestLevel);
+        C2d.lineTo(centerOfQuadrant - centerOfFirsLine,lowestLevel);
+        C2d.stroke();
+
+        C2d.moveTo(centerOfQuadrant + d8/2,lowestLevel);
+        C2d.lineTo(centerOfQuadrant + centerOfFirsLine,lowestLevel);
+        C2d.stroke();
+
+        //C2d.stroke();
+      //
+        lowestLevel+= d10;
+        var nextLine = (30 - d8)/2;
+        //C2d.moveTo(centerOfQuadrant - nextLine,lowestLevel);
+      //  C2d.lineTo(centerOfQuadrant + centerOfFirsLine,lowestLevel);
+        //C2d.stroke();
+    //
+    //
+      C2d.beginPath();
+      C2d.setLineDash([]);
+      var centerOfRectangle = (d8/2);
+      C2d.rect(centerOfQuadrant - d7/2, lowestLevel-10, d7 , d6);
+      C2d.stroke();
+
+      C2d.clearRect(centerOfQuadrant - d7/2+1, lowestLevel+10, d7-2 , 6);
+      //C2d.stroke();
+      C2d.beginPath();
+      C2d.moveTo(centerOfQuadrant - (d8-30)/2,lowestLevel);
+      C2d.lineTo(centerOfQuadrant - d8/2,lowestLevel);
+      C2d.stroke();
+
+      C2d.beginPath();
+      C2d.moveTo(centerOfQuadrant + (d8-30)/2,lowestLevel);
+      C2d.lineTo(centerOfQuadrant + d8/2,lowestLevel);
+      C2d.stroke();
+
+      C2d.beginPath();
+      C2d.moveTo(centerOfQuadrant - (d8-30)/2,lowestLevel+15);
+      C2d.lineTo(centerOfQuadrant - d8/2,lowestLevel+15);
+      C2d.stroke();
+
+      C2d.beginPath();
+      C2d.moveTo(centerOfQuadrant + (d8-30)/2,lowestLevel+15);
+      C2d.lineTo(centerOfQuadrant + d8/2,lowestLevel+15);
+      //C2d.stroke();
+
+      C2d.moveTo(centerOfQuadrant - (d8-30),lowestLevel+15);
+      C2d.lineTo(centerOfQuadrant - d8/2,lowestLevel - 15);
+      //C2d.stroke();
+
+      C2d.moveTo(centerOfQuadrant + (d8-30),lowestLevel+15);
+      C2d.lineTo(centerOfQuadrant + d8/2,lowestLevel - 15);
+      C2d.stroke();
+
+  }
+
+  function drawUpLook(){
+    var marginTop = 10;
+    var lowestLevel = canvasHeight/2 + marginTop;
+    var centerOfQuadrant = canvasWidth/4;
+    var centerOfBaseLine = d11/2;
+
+    C2d.setLineDash([]);
+    var centerOfTopLine = d11/2;
+    var lengthOfLeftLine = d8;
+    var centerOfSecondLine = d4/2;
+    var some = (d11 -  d8);
+
+    C2d.moveTo(centerOfQuadrant - centerOfTopLine,lowestLevel);
+    C2d.lineTo(centerOfQuadrant + centerOfTopLine,lowestLevel);
+    C2d.stroke();
+    //C2d.rect(centerOfQuadrant - centerOfTopLine, marginTop, d1, d2);
+    //C2d.stroke();
+    //
+    lowestLevel += d10;
+    C2d.beginPath();
+    C2d.moveTo(centerOfQuadrant - centerOfSecondLine,lowestLevel);
+    C2d.lineTo(centerOfQuadrant + centerOfSecondLine,lowestLevel);
+    C2d.stroke();
+    //
+
+    C2d.beginPath();
+    C2d.moveTo(centerOfQuadrant - some,lowestLevel);
+    C2d.lineTo(centerOfQuadrant - some,lowestLevel+50);
+    C2d.stroke();
+    /*lowestLevel += d10;
+    C2d.beginPath();
+    C2d.moveTo(centerOfQuadrant - centerOfSecondLine,lowestLevel);
+    C2d.lineTo(centerOfQuadrant + centerOfSecondLine,lowestLevel);
+    C2d.stroke();*/
+    // bottom line
+    C2d.beginPath();
+    lowestLevel += 60;
+    C2d.moveTo(centerOfQuadrant - centerOfTopLine,lowestLevel);
+    C2d.lineTo(centerOfQuadrant + centerOfTopLine,lowestLevel);
+    C2d.stroke();
+    //C2d.arc(125,125,d/2,0,2*Math.PI);
+    //C2d.stroke();
+  }
+
+  function drawFrontLook(){
+    //var d1=document.ParametersForm.D1.value*1;
+    //var d2=document.ParametersForm.D2.value*1;
+    var marginTop = 10;
+    var lowestLevel = marginTop;
+    var centerOfQuadrant = canvasHeight/4;
+    var centerOfBaseLine = d11/2;
+    // vertical ----- - ----- at center
+      C2d.beginPath();
+      C2d.lineWidth=1;
+      C2d.setLineDash([20,3,2,3]);
+      C2d.moveTo(centerOfQuadrant,0);
+      C2d.lineTo(centerOfQuadrant,canvasHeight);
+      C2d.stroke();
+    // draw rectangle with D1 and D2 values
+      C2d.beginPath();
+      C2d.setLineDash([]);
+      var centerOfRectangle = d1/2;
+      C2d.rect(centerOfQuadrant - centerOfRectangle, marginTop, d1, d2);
+      C2d.stroke();
+      lowestLevel+= d2;
+      C2d.setLineDash([]);
+    // draw d4 _________
+      C2d.beginPath();
+      var centerOfFirsLine = d4/2;
+      C2d.moveTo(centerOfQuadrant - centerOfFirsLine,lowestLevel);
+      C2d.lineTo(centerOfQuadrant + centerOfFirsLine,lowestLevel);
+      C2d.stroke();
+    //draw d5
+      lowestLevel += d5;
+      C2d.beginPath();
+      var centerOfSecondLine = (centerOfFirsLine + centerOfBaseLine)/2;
+      C2d.moveTo(centerOfQuadrant - centerOfSecondLine,lowestLevel);
+      C2d.lineTo(centerOfQuadrant + centerOfSecondLine,lowestLevel);
+      C2d.stroke();
+      lowestLevel += d5;
+    //
+      C2d.beginPath();
+      C2d.moveTo(centerOfQuadrant - centerOfBaseLine,lowestLevel);
+      C2d.lineTo(centerOfQuadrant - centerOfFirsLine,lowestLevel - 2*d5);
+      C2d.stroke();
+    //
+      C2d.beginPath();
+      C2d.moveTo(centerOfQuadrant + centerOfBaseLine,lowestLevel);
+      C2d.lineTo(centerOfQuadrant + centerOfFirsLine,lowestLevel - 2*d5);
+      C2d.stroke();
+    // for hole line
+      C2d.setLineDash([10,10]);
+      C2d.beginPath();
+      C2d.moveTo(centerOfQuadrant + 38,lowestLevel-10);
+      C2d.lineTo(centerOfQuadrant,lowestLevel -10);
+      C2d.stroke();
+      C2d.beginPath();
+      C2d.moveTo(centerOfQuadrant - 38,lowestLevel-10);
+      C2d.lineTo(centerOfQuadrant,lowestLevel -10);
+
+      C2d.stroke();
+
+C2d.setLineDash([]);
+    // bottom line
+      lowestLevel += d10;
+      C2d.beginPath();
+      C2d.moveTo(centerOfQuadrant - centerOfBaseLine,lowestLevel);
+      C2d.lineTo(centerOfQuadrant + centerOfBaseLine,lowestLevel);
+      C2d.stroke();
+    // connect left bottom with upper part
+      C2d.beginPath();
+      C2d.moveTo(centerOfQuadrant - centerOfBaseLine,lowestLevel);
+      C2d.lineTo(centerOfQuadrant - centerOfBaseLine,lowestLevel -d10);
+      C2d.stroke();
+    // connect right bottom with upper part
+      C2d.beginPath();
+      C2d.moveTo(centerOfQuadrant + centerOfBaseLine,lowestLevel);
+      C2d.lineTo(centerOfQuadrant + centerOfBaseLine,lowestLevel -d10);
+      C2d.stroke();
+  }
+
+  function draw()
+  {
+    commit();
+    drawDelimetersLines();
+    drawFrontLook();
+    drawUpLook();
+    drawRightLook();
+  }
+  /*var radius=document.ParametersForm.R.value*1;
+  var d1=document.ParametersForm.D1.value*1;
+  var d2=document.ParametersForm.D2.value*1;
+
+  C2d.beginPath();
+  C2d.setLineDash([]);
+  C2d.moveTo(100,0);
+  C2d.lineTo(125,125);
+  C2d.stroke();
+
+  C2d.beginPath();
+  C2d.arc(125,125,radius,0,2*Math.PI);
+  C2d.stroke();
+
+  C2d.beginPath();
+  C2d.lineWidth=2;
+  C2d.moveTo(30,0);
+  C2d.lineTo(155,125);
+  C2d.stroke();
+
+  C2d.beginPath();
+  C2d.lineWidth=1;
+  C2d.setLineDash([20,3,2,3]);
+  C2d.moveTo(60,0);
+  C2d.lineTo(185,125);
+  C2d.stroke();
+
+  C2d.beginPath();
+  C2d.setLineDash([10,10]);
+  C2d.moveTo(90,0);
+  C2d.lineTo(215,125);
+  C2d.stroke();
+}*/
+
+</script>
+</body>
+</html>
