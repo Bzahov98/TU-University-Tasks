@@ -1,18 +1,18 @@
 #include<stdio.h>
 #include<string.h>
 
-#define ARRAY_SIZE 300       // do not work with more than that amount of lines {Malloc use restriction}
-#define ARRAY_LINE_SIZE 1256 // do not work with more than that amount of symbols per line {Malloc use restriction}
-#define FILENAME_SIZE 100
+const int ARRAY_SIZE = 300 ;       // do not work with more than that amount of lines {Malloc use restriction}
+const int ARRAY_LINE_SIZE = 1256; // do not work with more than that amount of symbols per line {Malloc use restriction}
+const int FILENAME_SIZE = 100;
 
 #define STR_QUIT_Q "Q"
 #define STR_QUIT_q "q"
 #define C_FILE_EXTENTION "c"
 
-#define DEBUG 0 // 1 for showing debug information on screen
+const int DEBUG = 0; // 1 for showing debug information on screen
 
-#define ALL_OPERATORS 7 // number operators for which program will check
-const char *operatorsStr[ALL_OPERATORS] = {"if", "else", "switch", "goto", "while", "do", "for"}; //operators for which program will check
+#define ALL_OPERATORS  7// number operators for which program will check
+const char* operatorsStr[ALL_OPERATORS] = {"if", "else", "switch", "goto", "while", "do", "for"}; //operators for which program will check
 
 enum states { TEXT,           //For Text
               SAW_SLASH,      // For
@@ -29,51 +29,41 @@ int readFromFile    (char allLines[][ARRAY_LINE_SIZE]); // DONE
 int readFromKeyboard(char allLines[][ARRAY_LINE_SIZE]); // DONE
 
 // task functions
-int  lineWithLessSymbols(char allLines[][ARRAY_LINE_SIZE]); // DONE
-int* operatorsInProgram(char allLines[][ARRAY_LINE_SIZE]); // DONE
+int lineWithLessSymbols(char allLines[][ARRAY_LINE_SIZE]); // DONE
+int operatorsInProgram (char allLines[][ARRAY_LINE_SIZE], int* operationsResult); // DONE
 
 // write functions
-void writeToFile  (char allLines[][ARRAY_LINE_SIZE], int minSymbolsLineNumber,int* operatorsNumberArr){};//TODO
-
-void writeToScreen(char allLines[][ARRAY_LINE_SIZE], int minSymbolsLineNumber, int* operatorsNumberArr){
-  printf("Редът с най-малкък брой значещи символи е номер: %d \"%s\"\n", minSymbolsLineNumber+1, allLines[minSymbolsLineNumber]);
-  int operatorNumber;
-  //printf("%d\n", operatorsNumberArr[2]);
-/*  for (operatorNumber = 0; operatorNumber < ALL_OPERATORS; operatorNumber++) {
-    printf("operator: '%s' was found %d times\n", operatorsStr[operatorNumber+1], operatorsNumberArr[operatorNumber+1]);
-  }
-*/
-};//TODO
+int writeToFile  (char allLines[][ARRAY_LINE_SIZE], int minSymbolsLineNumber, int* operatorsNumberArr);
+void writeToScreen(char allLines[][ARRAY_LINE_SIZE], int minSymbolsLineNumber, int* operatorsNumberArr);
 
 // support functions
 void loadMenu(char allLines[][ARRAY_LINE_SIZE]); // NOTE check functions return value
-void printfDoubleArray(char allLines[][ARRAY_LINE_SIZE]); // DONE
+int checkFileExtention(char FileName[], const char extention[]); // DONE
+int scanForSubStr(char* currentLine, const char* sub); //DONE
+void printDoubleArray(char allLines[][ARRAY_LINE_SIZE]); // DONE
 void zeroDoubleArray(char allLines[][ARRAY_LINE_SIZE]); // DONE
-int checkFileExtention(char inputFileName[], const char extention[]); // DONE
 char* cleanExtraWhiteSpaces(char line[]); // DONE
-int scanForSubStr(char* currentLine, const char* sub);
-
 //*****************************************************************************************
 int main(){
-
-  char allLines[ARRAY_SIZE][ARRAY_LINE_SIZE] = {{""}};;
+  char allLines[ARRAY_SIZE][ARRAY_LINE_SIZE];;
   zeroDoubleArray(allLines);
   loadMenu(allLines);
-
   return 0;
 }
 //*****************************************************************************************
 void loadMenu(char allLines[][ARRAY_LINE_SIZE]){
   char choice;
-
+  int minSymbolsLineNumber = 0;
   do{
     printf("\n>------------------------------------------------------------<\n");
     printf(">Моля изберете номер на опция:                               <\n");
-    printf(">1. Четене от Файл и запис във файл                          <\n");      printf(">2. Четене от Файл и извеждане на резултата на екрана        <\n");
+    printf(">1. Четене от Файл и запис във файл                          <\n");
+    printf(">2. Четене от Файл и извеждане на резултата на екрана        <\n");
     printf(">3. Четене от клавиатурата и извеждане във Файл              <\n");
     printf(">4. Четене от клавиатурата и извеждане на резултата на екрана<\n");
     printf(">5. Изход от програмата ( 'Q' or 'q' )                       <\n");
     printf(">------------------------------------------------------------<\n");
+    int operationResult[ALL_OPERATORS] = {0}; //reset each cicle data result
 
     scanf(" %c",&choice); // space before the %; this consumes the whitespace so that the next scanf call should work
 
@@ -82,36 +72,38 @@ void loadMenu(char allLines[][ARRAY_LINE_SIZE]){
       case '1':
         printf(">>Избрахте: 1. Четене от Файл и запис във файл<\n");
         zeroDoubleArray(allLines);
-        if (readFromFile(allLines) != 0) {
-          break;
-        }
-        //lineWithLessSymbols(allLines);
-        //operatorsInProgram(allLines);
-        writeToFile(allLines, lineWithLessSymbols(allLines),operatorsInProgram(allLines));
+        if (readFromFile(allLines)) break;
+        minSymbolsLineNumber = lineWithLessSymbols(allLines);
+        if (!minSymbolsLineNumber) break;
+        if (operatorsInProgram(allLines, operationResult)) break;
+        writeToFile(allLines, minSymbolsLineNumber, operationResult);
         break;
       case '2':
         printf(">>Избрахте: 2. Четене от Файл и извеждане на резултата на екрана<\n");
         zeroDoubleArray(allLines);
-          if (readFromFile(allLines) != 0) {
-            break;
-          }
-          writeToScreen(allLines, lineWithLessSymbols(allLines),operatorsInProgram(allLines));
-          break;
+        if (readFromFile(allLines)) break;
+        minSymbolsLineNumber = lineWithLessSymbols(allLines);
+        if (!minSymbolsLineNumber) break;
+        if (operatorsInProgram(allLines, operationResult)) break;
+        writeToScreen(allLines, minSymbolsLineNumber,operationResult);
+        break;
       case '3':
         printf(">>Избрахте: 3. Четене от клавиатурата и извеждане във Файл<\n");
         zeroDoubleArray(allLines);
-        readFromKeyboard(allLines);
-        //lineWithLessSymbols(allLines);
-        //operatorsInProgram(allLines);
-        writeToFile(allLines, lineWithLessSymbols(allLines),operatorsInProgram(allLines));
+        if (readFromKeyboard(allLines)) break;
+        minSymbolsLineNumber = lineWithLessSymbols(allLines);
+        if (!minSymbolsLineNumber) break;
+        if (operatorsInProgram(allLines, operationResult)) break;
+        writeToFile(allLines, minSymbolsLineNumber,operationResult);
         break;
       case '4':
         printf(">>Избрахте: 4. Четене от клавиатурата и извеждане на резултата на екрана\n");
         zeroDoubleArray(allLines);
         readFromKeyboard(allLines);
-        //lineWithLessSymbols(allLines);
-        //operatorsInProgram(allLines);
-        writeToScreen(allLines, lineWithLessSymbols(allLines),operatorsInProgram(allLines));
+        minSymbolsLineNumber = lineWithLessSymbols(allLines);
+        if (!minSymbolsLineNumber) break;
+        if (operatorsInProgram(allLines, operationResult)) break;
+        writeToScreen(allLines, minSymbolsLineNumber,operationResult);
         break;
       //Quit program options;
       case 'Q':
@@ -119,6 +111,7 @@ void loadMenu(char allLines[][ARRAY_LINE_SIZE]){
       case '5':
         printf(">>Изход\n");
         return;
+    
       default:
         zeroDoubleArray(allLines);
         printf(">>Невалиден избор, моля въведете пак!\n");
@@ -128,14 +121,13 @@ void loadMenu(char allLines[][ARRAY_LINE_SIZE]){
 }
 
 int lineWithLessSymbols(char allLines[][ARRAY_LINE_SIZE]){
-  int result=0,i,j,minSymbolsLineNumber,minMeanfulSymbols;
+  int i,j,minSymbolsLineNumber,minMeanfulSymbols;
 
-
-  if (DEBUG) {
-    printfDoubleArray(allLines);
+  if (DEBUG>5) {
+    printDoubleArray(allLines);
   }
   if (!strlen(allLines[0]) && !strlen(allLines[1])) {
-    printf("Грешка - Липса на данни! >%s< %d\n",allLines[0],strlen(allLines[0]));
+    printf("Грешка - Липса на данни! \n");
     return -1; // with error
   }
 
@@ -143,7 +135,7 @@ int lineWithLessSymbols(char allLines[][ARRAY_LINE_SIZE]){
     int lineMeanfulSymbols = 0;
     char currentLine[ARRAY_LINE_SIZE];
     strcpy(currentLine,allLines[i]);
-    DEBUG?printf("––line: <!>> %s <<!> number: %d ––\n",allLines[i], i+1):printf("");
+    DEBUG>5?printf("DEBUG––line: <!>> %s <<!> number: %d ––\n",allLines[i], i+1):printf("");
 
     for (j = 0;/*checked down*/; j++){
       char currentChar = currentLine[j];
@@ -154,16 +146,14 @@ int lineWithLessSymbols(char allLines[][ARRAY_LINE_SIZE]){
         if (i == 0) {
           minMeanfulSymbols = lineMeanfulSymbols;
           minSymbolsLineNumber = i;
-        }else if (minMeanfulSymbols > lineMeanfulSymbols) {
+        } else if (minMeanfulSymbols > lineMeanfulSymbols) {
           minMeanfulSymbols = lineMeanfulSymbols;
           minSymbolsLineNumber = i;
-        }
-        break; // go to next line
+        } break; // go to next line
       }
-
       switch(state){
         case TEXT : // normal text and whitespaces, count meanful symbols
-          DEBUG?printf("\n--TEXT-- %c--\n",currentChar):printf("");
+          DEBUG>5?printf("\n--TEXT-- %c at %s--\n",currentChar,currentLine):printf("");
           switch(currentChar){
             case '/'  : state = SAW_SLASH;      break;
             case '\"' : state = SAW_QUOTE;      break;
@@ -171,37 +161,29 @@ int lineWithLessSymbols(char allLines[][ARRAY_LINE_SIZE]){
             case ' '  :        // Don't count white space
             case '\t' : break; // Don't count white space
             default   : lineMeanfulSymbols++ ;  break; // count meanful symbols
-          }
-          break;
-
+          } break;
         case SAW_SLASH : // saw / , link to single or multi comment functionality
-          DEBUG?printf("--SAW SWASH-- %c--\n",currentChar):printf("");
+          DEBUG>5?printf("--SAW SWASH-- %c--\n",currentChar):printf("");
           switch(currentChar){
             case '/'  : state = SINGLE_COMMENT; break;
             case '*'  : state = MULTI_COMMENT;  break;
             default   : state = TEXT;           break;
-          }
-          break;
-
-        case SAW_STAR : // saw * // DONE
-          DEBUG?printf("--SAW STAR-- %c--\n",currentChar):printf("");
+          } break;
+        case SAW_STAR : // saw *
+          DEBUG>5?printf("--SAW STAR-- %c--\n",currentChar):printf("");
           switch(currentChar){
             case '/'  : state = TEXT;           break;
             case '*'  : break; // Stay at SAW_STAR state
             default   : state = MULTI_COMMENT;  break;
-          }
-          break;
-
-        case SAW_QUOTE : // saw "" // DONE
-          DEBUG?printf("--SAW QUOTE-- %c--\n",currentChar):printf("");
+          } break;
+        case SAW_QUOTE : // saw ""
+          DEBUG>5?printf("--SAW QUOTE-- %c--\n",currentChar):printf("");
           switch (currentChar){
             case '\"' : state = TEXT; break;
             default : break; // under quote;
-          }
-        break;
-
-        case SAW_APOSTROPHE :  //DONE
-          DEBUG?(printf("--SAW APOSTROPHE-- %c--\n",currentChar)):printf("");
+          } break;
+        case SAW_APOSTROPHE :
+          DEBUG>5?(printf("--SAW APOSTROPHE-- %c--\n",currentChar)):printf("");
           switch (currentChar){
             case '\'' : state = TEXT; break;
             default : break; // under quote;
@@ -209,12 +191,12 @@ int lineWithLessSymbols(char allLines[][ARRAY_LINE_SIZE]){
         break;
 
         case SINGLE_COMMENT : //TODO optimize loop to skip rest unnecessary symbols
-          DEBUG?printf("--COMMENT-- %c--\n",currentChar):printf("");;
+          DEBUG>5?printf("--COMMENT-- %c--\n",currentChar):printf("");;
           //state = NEXT_LINE;
           break;
 
         case MULTI_COMMENT :
-          DEBUG?(printf("--MULTI_COMMENT-- %c--\n",currentChar)):printf("");
+          DEBUG>5?(printf("--MULTI_COMMENT-- %c--\n",currentChar)):printf("");
           switch(currentChar){
             case '*'  : state = SAW_STAR; break;
             default   : break;
@@ -222,28 +204,27 @@ int lineWithLessSymbols(char allLines[][ARRAY_LINE_SIZE]){
           break;
         default: break; // ERROR
     }
-    DEBUG?printf("line number: %d length: %d\n", i, lineMeanfulSymbols):printf("");
+    DEBUG>5?printf("line number: %d length: %d\n", i, lineMeanfulSymbols):printf("");
     }
   }
-  DEBUG?printf("%d %s\n", minSymbolsLineNumber, allLines[minSymbolsLineNumber]):printf("");
+  //DEBUG?printf("%d %s\n", minSymbolsLineNumber, allLines[minSymbolsLineNumber]):printf("");
   return minSymbolsLineNumber;
 }
 
 int readFromFile(char allLines[][ARRAY_LINE_SIZE]){
-  char inputFileName[FILENAME_SIZE];// = "homework2_BZ.c", outputFileName[] = "test.c";
+  char inputFileName[FILENAME_SIZE];char line[ARRAY_LINE_SIZE];
   int i = 0;
-  char line[ARRAY_LINE_SIZE];
   FILE *inputFile;
-  do/* open inputFile*/{
+  do{
+    /* open inputFile and check it until get right extention*/
     //printf("Please write path and file name from which to read\n");
     printf("Моля въведете името на файла, от който искате да четете!, 'Q' за връщане към менюто\n");
-    scanf("%s",&inputFileName);
+    scanf("%s", &inputFileName);
     if (!(strcmp(inputFileName, STR_QUIT_Q) == 0 || strcmp(inputFileName, STR_QUIT_q))) {
       return 1; // return to Menu
     }else if (!checkFileExtention(inputFileName, C_FILE_EXTENTION)) {
       continue; // ask for new path
     }
-
     inputFile = fopen (inputFileName, "r");
     if ( inputFile == NULL ){ // check file for wrong
       printf("\n!!!Грешка с файла!!!\n");
@@ -251,33 +232,31 @@ int readFromFile(char allLines[][ARRAY_LINE_SIZE]){
     }else break; // file is fine, continues to read it
   }while(1);
 
-  while (fgets(line, ARRAY_LINE_SIZE, inputFile) != NULL){
+  while (fgets(line, ARRAY_LINE_SIZE, inputFile) != NULL){ // read data from array and write it to array
     //printf(">Line number:%d-> %s ",i, line);
     if (i < ARRAY_SIZE-1) {
-      strcpy(allLines[i], line);
-      i++;
+      strcpy(allLines[i++], line);
     }else {
       printf("Файлът е твърде дълъг!!! Ще се обработи до ред: %d\n", i);
       break;
     }
   }
-
   strcpy(allLines[i],"\0"); // add termination sign in end
   fclose (inputFile);
-  if (DEBUG) {
-    //printfDoubleArray(allLines);
+  if (DEBUG>5) {
+    printDoubleArray(allLines);
   }
   return 0;
 };
 
 int readFromKeyboard(char allLines[][ARRAY_LINE_SIZE]){
   char str[ARRAY_LINE_SIZE];
-  int i,x= 0,y = 0;
+  int i,x = 0,y = 0;
 
   while (fgets(str,ARRAY_LINE_SIZE,stdin) != NULL) {
-    for (i = 0; str[i] != '\0'; i ++) {
+    for (i=0; str[i] != '\0'; i ++) {
       char currentChar = str[i];
-      if (currentChar == '\n'){//} || ((y-1) <= ARRAY_LINE_SIZE)) {
+      if (currentChar == '\n'){
         y = 0;
         if (!(++x < ARRAY_SIZE-1)) {
           printf("Файлът е твърде дълъг!!! Ще се обработи до ред: %d\n", i);
@@ -286,48 +265,68 @@ int readFromKeyboard(char allLines[][ARRAY_LINE_SIZE]){
       }else{
         if (y < ARRAY_LINE_SIZE-1){
           allLines[x][y] = currentChar;
-          //printf("< X: %d ,Y: %d, Char: %c allLines: %c>\n", x,y,currentChar,allLines[x][y]);
+          //printf("< X:Y: [%d][%d], Char: %c allLines: %c>\n", x,y,currentChar,allLines[x][y]);
           y++;
         }else {
           printf("Редът %d е твърде дълъг!!! Ще се обработи до %d символ\n", x,y);
-          y = 0;
-          x++;
+          x++;  // next line
+          y = 0;// start new line from begginig
         }
-      }
-      //printf(">>>>%d\n", y);      //printf("< X: %d ,Y: %d, Char: %c >\n", x,y,currentChar);
+      }//printf("< X: %d ,Y: %d, Char: %c >\n", x,y,currentChar);
     }
   }
-  y = 0;
   if (DEBUG) {
-    //printfDoubleArray(allLines);
+    printDoubleArray(allLines);
   }
   return 0;
 };
 
-void printfDoubleArray(char allLines[][ARRAY_LINE_SIZE]){
-  int i,j;
-  printf("\n%s\n", "VVVVVVVV");
-  for (i = 0; strlen(allLines[i]); i++){
-    for (j = 0; allLines[i][j] != '\0'; j++){
-      printf("[%d][%d]>> %c\n",i,j,allLines[i][j]);
-    }
+void writeToScreen(char allLines[][ARRAY_LINE_SIZE], int minSymbolsLineNumber, int operatorsNumberArr[ALL_OPERATORS-1]){
+  printf("Редът с най-малкък брой значещи символи е номер: %d \"%s\"\n", minSymbolsLineNumber+1, allLines[minSymbolsLineNumber]);
+  int operatorNumber;
+
+  for (operatorNumber = 0; operatorNumber < ALL_OPERATORS; operatorNumber++) {
+    printf("operator: '%7s' was found %d times\n", operatorsStr[operatorNumber], operatorsNumberArr[operatorNumber]);
   }
-  printf("%s\n", "^^^^^^^^^^");
 }
 
-void zeroDoubleArray(char allLines[][ARRAY_LINE_SIZE]){
-  int i=0,j=0;
-  for(i = 0; i < ARRAY_SIZE; i++) //allLines[i+1] != 0
-   for(j = 0; j < ARRAY_LINE_SIZE; j++){
-     allLines[i][j] = '\0';
-   }
+int writeToFile(char allLines[][ARRAY_LINE_SIZE], int minSymbolsLineNumber, int operatorsNumberArr[ALL_OPERATORS-1]){
+  char outputFileName[FILENAME_SIZE];
+  FILE *outputFile;
+  do{ /* open output File and check it until get right extention*/
+    printf("Моля въведете името на файла, в който искате да запишете резултата!, 'Q' за връщане към менюто\n");
+    scanf("%s", &outputFileName);
+    if (!(strcmp(outputFileName, STR_QUIT_Q) == 0 || strcmp(outputFileName, STR_QUIT_q))) {
+      return 1; // return to Menu
+    }
+    outputFile = fopen (outputFileName, "w");
+    if ( outputFile == NULL ){ // check file for wrong
+      printf("\n!!!Грешка с файла!!!\n");
+      perror (outputFileName);
+    }else break; // file is fine, continues to write in it
+  }while(1);
+
+  char* stringForWrite;
+  sprintf(stringForWrite, "Редът с най-малкък брой значещи символи е номер: %d \"%s\"\n", minSymbolsLineNumber+1, allLines[minSymbolsLineNumber]);
+  fprintf(outputFile, "%s", stringForWrite);
+  int operatorNumber;
+  printf("%s\n", "j");char* stringForWrite2;
+  for (operatorNumber = 0; operatorNumber < ALL_OPERATORS; operatorNumber++) {
+
+    sprintf(stringForWrite,"operator: '%7s' was found %d times\n", operatorsStr[operatorNumber], operatorsNumberArr[operatorNumber]);
+    fprintf(outputFile,"%s", stringForWrite);
+    //sprintf(stringForWrite,"operator: '%s' was found  times\n", operatorsStr[operatorNumber]);//, operatorsNumberArr[operatorNumber]);
+
+  }
+  fclose (outputFile);
+  return 0;
 }
 
-int checkFileExtention(char inputFileName[], const char extention[]){
+int checkFileExtention(char FileName[], const char extention[]){
   int i = 0;
   char tempFileName[FILENAME_SIZE];
   char *splitedArray[FILENAME_SIZE];
-  strcpy(tempFileName,inputFileName);
+  strcpy(tempFileName,FileName);
 
   splitedArray[i] = strtok(tempFileName,".");
   while(splitedArray[i]!=NULL){
@@ -357,53 +356,55 @@ char* cleanExtraWhiteSpaces(char line[]){ //allLines[][ARRAY_LINE_SIZE],int inde
   return line;
 }
 
-int* operatorsInProgram(char allLines[][ARRAY_LINE_SIZE])/* TODO*/{
-  int results[ALL_OPERATORS] = {0};
-  int i=0,j=0;
-
+int operatorsInProgram(char allLines[][ARRAY_LINE_SIZE],int operationsResult[ALL_OPERATORS-1]){
+  unsigned int i=0;
   if (!strlen(allLines[0]) && !strlen(allLines[1])) {
-    printf("Грешка - Липса на данни! >%s< %d\n",allLines[0],strlen(allLines[0]));
-    results[0] = -1;
-    return results; // with error
+    printf("Грешка - Липса на данни! >%s< %zu\n",allLines[0],strlen(allLines[0]));
+    return 1; // with error
   }
 
   for (i = 0; strlen(allLines[i]); i++) {
-    int lineMeanfulSymbols = 0;
     char currentLine[ARRAY_LINE_SIZE];
     strcpy(currentLine,allLines[i]);
-    printf("––line: <!>> %s <<!> number: %d ––\n",allLines[i], i+1);
-    //DEBUG?printf("––line: <!>> %s <<!> number: %d ––\n",allLines[i], i+1):printf("");
+    //DEBUG == 2?printf("––line: <!>> %s <<!> number: %d ––\n",allLines[i], i+1):printf("");
       //char *sub = "else";
-      for (size_t operatorNumber = 0; operatorNumber < ALL_OPERATORS; operatorNumber++) {
-        int result;
-        result = results[operatorNumber] += scanForSubStr(currentLine,operatorsStr[operatorNumber]);
-        //printf("%s < %d\n",sub, result); //TODO
+      for (int operatorNumber = 0; operatorNumber < ALL_OPERATORS; operatorNumber++) {
+        operationsResult[operatorNumber] += scanForSubStr(currentLine,operatorsStr[operatorNumber]);
         //printf("operator: '%s' was found %d times\n", operatorsStr[operatorNumber], result);
       }
   }//end of allLines for
-  for (int operatorNumber = 0; operatorNumber < ALL_OPERATORS; operatorNumber++) {
-    printf("-->operator: '%s' was found %d times\n", operatorsStr[operatorNumber], results[operatorNumber]);
+  for (int operatorNumber = 0; operatorNumber < ALL_OPERATORS-1; operatorNumber++) { //DEBUG
+    DEBUG?printf("DEBUG-->operator: '%s' was found %d times\n", operatorsStr[operatorNumber], operationsResult[operatorNumber]):printf("");;
   }
-  printf("---***---\n");
-
-  return results;
+  return 0;
 }
 
 int scanForSubStr(char* currentLine, const char* sub){
-  int i =0,foundMatches=0;
-  char splittedLine[ARRAY_LINE_SIZE];
-  strcpy(splittedLine,currentLine);
+  int foundMatches = 0;
+  char currentLine_cpy[ARRAY_LINE_SIZE];
+  strcpy(currentLine_cpy,currentLine);
 
-  for (char *p = splittedLine; (p = strstr(p, sub)) != NULL; p++) {
+  for (char *p = currentLine_cpy; (p = strstr(p, sub)) != NULL; p++) {
     foundMatches++; // substring found at offset
-    DEBUG?printf("Found at: %s %tu\n",splittedLine, p - splittedLine):printf("");
-    if (*p == '\0'){
-      //printf("inBreak,line: %d \n", i);
-      break;
-    }
+    //DEBUG==2?printf("DEBUG: Found at: %s pos: %tu count:%d\n", currentLine_cpy, p - currentLine_cpy, foundMatches):printf("");
+    if (*p == '\0') break;
   }
-  if (foundMatches == 0) { // substring not found
-    DEBUG?printf("%s = 0\n",sub):printf("");;
-  }else DEBUG?printf("%s = %d\n",sub, foundMatches):printf("");
+  //DEBUG==2?printf("DEBUG: %s = %d\n",sub, foundMatches):printf("");;
   return foundMatches;
+}
+
+void printDoubleArray(char allLines[][ARRAY_LINE_SIZE]){
+  int i,j;
+  printf("DEBUG:\n%s\n", "VVVVVVVV");
+  for (i = 0; strlen(allLines[i]); i++){
+    for (j = 0; allLines[i][j] != '\0'; j++)
+      printf("DEBUG: [%d][%d]>> '%c' <<\n",i,j,allLines[i][j]);
+  }printf("DEBUG: %s\n","^^^^^^^^^^");
+}
+
+void zeroDoubleArray(char allLines[][ARRAY_LINE_SIZE]){
+  int i,j;
+  for(i = 0; i < ARRAY_SIZE; i++) //allLines[i+1] != 0
+   for(j = 0; j < ARRAY_LINE_SIZE; j++)
+    allLines[i][j] = '\0';
 }

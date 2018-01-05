@@ -1,0 +1,10 @@
+Редът с най-малкък брой значещи символи е номер: 27 "// read functions
+"
+operator: '     if' was found 27 times
+operator: '   else' was found 7 times
+operator: ' switch' was found 9 times
+operator: '   goto' was found 1 times
+operator: '  while' was found 5 times
+operator: '     do' was found 6 times
+operator: '    for' was found 12 times
+operator: '      ;' was found 196 times
