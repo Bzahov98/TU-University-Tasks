@@ -69,7 +69,7 @@ void loadMenu(char allLines[][ARRAY_LINE_SIZE]){
     printf(">4. Четене от клавиатурата и извеждане на резултата на екрана<\n");
     printf(">5. Изход от програмата ( 'Q' or 'q' )                       <\n");
     printf(">------------------------------------------------------------<\n");
-    int operationResult[ALL_OPERATORS] = {0}; //reset each cicle data result
+    int operationResult[ALL_OPERATORS] = {0}; //reset each cicle, data result
     char allLinesMeaningSymbols[ARRAY_SIZE][ARRAY_LINE_SIZE];
     zeroDoubleArray(allLinesMeaningSymbols);
 
@@ -78,16 +78,14 @@ void loadMenu(char allLines[][ARRAY_LINE_SIZE]){
       //Menu options;
       case '1':
         printf(">>Избрахте: 1. Четене от Файл и запис във файл<\n");
-        zeroDoubleArray(allLines);
         if (readFromFile(allLines)) break;
         minSymbolsLineNumber = lineWithLessSymbols(allLines,allLinesMeaningSymbols);
         if (minSymbolsLineNumber==-1) break;
-        if (operatorsInProgram(allLines, operationResult)) break;
-        writeToFile(allLinesMeaningSymbols, minSymbolsLineNumber, operationResult);
+        if (operatorsInProgram(allLinesMeaningSymbols, operationResult)) break;
+        writeToFile(allLines, minSymbolsLineNumber, operationResult);
         break;
       case '2':
         printf(">>Избрахте: 2. Четене от Файл и извеждане на резултата на екрана<\n");
-        zeroDoubleArray(allLines);
         if (readFromFile(allLines)) break;
         minSymbolsLineNumber = lineWithLessSymbols(allLines,allLinesMeaningSymbols);
         if (minSymbolsLineNumber==-1) break;
@@ -96,7 +94,6 @@ void loadMenu(char allLines[][ARRAY_LINE_SIZE]){
         break;
       case '3':
         printf(">>Избрахте: 3. Четене от клавиатурата и извеждане във Файл<\n");
-        zeroDoubleArray(allLines);
         if (readFromKeyboard(allLines)) break;
         minSymbolsLineNumber = lineWithLessSymbols(allLines, allLinesMeaningSymbols);
         if (minSymbolsLineNumber==-1) break;
@@ -105,7 +102,6 @@ void loadMenu(char allLines[][ARRAY_LINE_SIZE]){
         break;
       case '4':
         printf(">>Избрахте: 4. Четене от клавиатурата и извеждане на резултата на екрана\n");
-        zeroDoubleArray(allLines);
         readFromKeyboard(allLines);
         minSymbolsLineNumber = lineWithLessSymbols(allLines,allLinesMeaningSymbols);
         if (minSymbolsLineNumber==-1) break;
@@ -198,18 +194,15 @@ int lineWithLessSymbols(char allLines[][ARRAY_LINE_SIZE],char allLinesMeaningSym
     int lineMeanfulSymbols = 0,firstNote = 1;
     char currentLine[ARRAY_LINE_SIZE];
     strcpy(currentLine,allLines[i]);
-    DEBUG>5?printf("––line: <!>> %s <<!> number: %d ––\n",allLines[i], i+1):printf("");
+    char str[22];
+    DEBUG>5?printf("––line: <!>> %s <<!> number: %d ––\n",allLines[i], i+1):sprintf(str,"do Nothing");
     for (j = 0;/*checked down*/; j++){
       char currentChar = currentLine[j];
-      if (state == SINGLE_COMMENT) { // OPTIMISATION: skip rest symbols of line after //
-        state = TEXT;
-        break;
-      }
-      if (currentLine[j] == '\0' || currentChar == '\n') { // go to next line
+      if (currentChar == '\0' || currentChar == '\n' || state == SINGLE_COMMENT) { // go to next line
         if (state != MULTI_COMMENT ) {
           state = TEXT;
         }
-        if (firstNote && lineMeanfulSymbols !=0) { // first time is minimum meanful symbols
+        if (firstNote && lineMeanfulSymbols !=0) { // first time is minimal meanful symbols
           firstNote = 0;
           minMeanfulSymbols = lineMeanfulSymbols;
           minSymbolsLineNumber = i;
@@ -217,16 +210,16 @@ int lineWithLessSymbols(char allLines[][ARRAY_LINE_SIZE],char allLinesMeaningSym
           minMeanfulSymbols = lineMeanfulSymbols;
           minSymbolsLineNumber = i;
         }
-        if (!strcmp(allLinesMeaningSymbols[i],"")) { // check if haven't meanful symbols and add space to save line
+        if (!strcmp(allLinesMeaningSymbols[i],"") || !strcmp(allLinesMeaningSymbols[i],"\n")) { // check if haven't meanful symbols and add space to save line
           allLinesMeaningSymbols[i][0]= ' ';
           allLinesMeaningSymbols[i][1]= '\0';
         }
-        jNew = 0; // reset output array line position to begginig
+        jNew = 0; // reset output array's line position to begginig
         break; // go to next line
       }
       switch(state){
         case TEXT : // normal text and whitespaces, count meanful symbols
-          DEBUG>5?printf("\n--TEXT-- %c at %s--\n",currentChar,currentLine):printf("");
+          DEBUG>5?printf("\n--TEXT-- %c at %s--\n",currentChar,currentLine):sprintf(str,"do Nothing");
           switch(currentChar){
             case '/'  : state = SAW_SLASH;      break;
             case '\"' : state = SAW_QUOTE;      break;
@@ -237,75 +230,74 @@ int lineWithLessSymbols(char allLines[][ARRAY_LINE_SIZE],char allLinesMeaningSym
                 allLinesMeaningSymbols[i][jNew] = currentChar;
                 jNew++; // if it's text
               }
-
               break;
             default   : if (state == TEXT) {
               allLinesMeaningSymbols[i][jNew] = currentChar; //save only meanful symbols
               lineMeanfulSymbols++ ; // count meanful symbols
               jNew++; // if it's text
-
             }break;
           } break;
         case SAW_SLASH : // saw / , link to single or multi comment functionality
-          DEBUG>5?printf("\n--SAW SWASH-- %c--\n",currentChar):printf("");
+          DEBUG>5?printf("\n--SAW SWASH-- %c--\n",currentChar):sprintf(str,"do Nothing");
           switch(currentChar){
             case '/'  : state = SINGLE_COMMENT; break;
             case '*'  : state = MULTI_COMMENT;  break;
             default   : state = TEXT;           break;
           } break;
         case SAW_STAR : // saw *
-          DEBUG>5?printf("\n--SAW STAR-- %c--\n",currentChar):printf("");
+          DEBUG>5?printf("\n--SAW STAR-- %c--\n",currentChar):sprintf(str,"do Nothing");
           switch(currentChar){
             case '/'  : state = TEXT; break;
             case '*'  : break; // Stay at SAW_STAR state
             default   : state = MULTI_COMMENT;  break;
           } break;
         case SAW_QUOTE : // saw ""
-          DEBUG>5?printf("\n--SAW QUOTE-- %c--\n",currentChar):printf("");
+          DEBUG>5?printf("\n--SAW QUOTE-- %c--\n",currentChar):sprintf(str,"do Nothing");
           switch (currentChar){
             case '\"' : state = TEXT; break;
             default : break; // under quote;
           } break;
         case SAW_APOSTROPHE :
-          DEBUG>5?(printf("\n--SAW APOSTROPHE-- %c--\n",currentChar)):printf("");
+          DEBUG>5?(printf("\n--SAW APOSTROPHE-- %c--\n",currentChar)):sprintf(str,"do Nothing");
           switch (currentChar){
             case '\'' : state = TEXT; break;
             default : break; // under apostrophe;
           }break;
         case SINGLE_COMMENT :
-          DEBUG>5?printf("\n--COMMENT-- %c--\n",currentChar):printf("");;
+          DEBUG>5?printf("\n--COMMENT-- %c--\n",currentChar):sprintf(str,"do Nothing");;
           break; // skip to next line at if up
         case MULTI_COMMENT :
-          DEBUG>5?(printf("\n--MULTI_COMMENT-- %c--\n",currentChar)):printf("");
+          DEBUG>5?(printf("\n--MULTI_COMMENT-- %c--\n",currentChar)):sprintf(str,"do Nothing");
           switch(currentChar){
             case '*'  : state = SAW_STAR; break;
             default   : break;
           }break;
         default: break; // ERROR
-      } DEBUG>5?printf("\nline number: %d length: %d\n", i, lineMeanfulSymbols):printf("");
+      } DEBUG>5?printf("\nline number: %d length: %d\n", i, lineMeanfulSymbols):sprintf(str,"do Nothing");
     }
   }
-  //DEBUG?printf("%d %s\n", minSymbolsLineNumber, allLines[minSymbolsLineNumber]):printf("");
+  //DEBUG?printf("%d %s\n", minSymbolsLineNumber, allLines[minSymbolsLineNumber]):sprintf(str,"do Nothing");
   return minSymbolsLineNumber;
 }
 
 int operatorsInProgram(char allLines[][ARRAY_LINE_SIZE],int operationsResult[ALL_OPERATORS-1]){
   unsigned int i=0;
   if (!strlen(allLines[0]) && !strlen(allLines[1])) {
-    printf("Грешка - Липса на данни! >%s< %zu\n",allLines[0],strlen(allLines[0]));
+    printf("Грешка - Липса на данни или няма значещи символи! >%s< %zu\n",allLines[0],strlen(allLines[0]));
     return 1; // with error
   }
   for (i = 0; strlen(allLines[i]); i++) {
     char currentLine[ARRAY_LINE_SIZE];
     strcpy(currentLine,allLines[i]);
-    //DEBUG == 2?printf("––line: <!>> %s <<!> number: %d ––\n",allLines[i], i+1):printf("");
+    //DEBUG >5?printf("––line: <!>> %s <<!> number: %d ––\n",allLines[i], i+1):sprintf(str,"do Nothing");
     for (int operatorNumber = 0; operatorNumber < ALL_OPERATORS; operatorNumber++) {
       operationsResult[operatorNumber] += scanForSubStr(currentLine,operatorsStr[operatorNumber]);
       //printf("operator: '%s' was found %d times\n", operatorsStr[operatorNumber], result);
     }
   }
   for (int operatorNumber = 0; operatorNumber < ALL_OPERATORS-1; operatorNumber++) { //DEBUG
-    DEBUG?printf("DEBUG-->operator: '%s' was found %d times\n", operatorsStr[operatorNumber], operationsResult[operatorNumber]):printf("");;
+    char str[22];
+    DEBUG?printf("DEBUG-->operator: '%s' was found %d times\n", operatorsStr[operatorNumber], operationsResult[operatorNumber]):sprintf(str,"do Nothing");;
   }
   return 0;
 }
@@ -362,10 +354,10 @@ int scanForSubStr(char* currentLine, const char* sub){
       continue; // it's part of a word, don't count it
       //printf("IGNORED: sub: '%s', line: %s,chBefore: %c,chAfter: %c\n",sub, p, chBefore,chAfter);
     } foundMatches++; // substring found at offset
-    //DEBUG==2?printf("DEBUG: Found at: %s pos: %tu count:%d\n", currentLine_cpy, p - currentLine_cpy, foundMatches):printf("");
+    //DEBUG==2?printf("DEBUG: Found at: %s pos: %tu count:%d\n", currentLine_cpy, p - currentLine_cpy, foundMatches):sprintf(str,"do Nothing");
     if (*p == '\0') break;
   }
-  //DEBUG==2?printf("DEBUG: %s = %d\n",sub, foundMatches):printf("");;
+  //DEBUG==2?printf("DEBUG: %s = %d\n",sub, foundMatches):sprintf(str,"do Nothing");;
   return foundMatches;
 }
 

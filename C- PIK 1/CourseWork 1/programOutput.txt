@@ -1,0 +1,9 @@
+Редът с най-малкък брой значещи символи е номер: 6 "*/while goto "else" 
+"
+operator: '     if' was found 2 times
+operator: '   else' was found 0 times
+operator: ' switch' was found 1 times
+operator: '   goto' was found 1 times
+operator: '  while' was found 1 times
+operator: '     do' was found 2 times
+operator: '    for' was found 1 times
