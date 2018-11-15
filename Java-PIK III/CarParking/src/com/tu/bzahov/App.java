@@ -5,7 +5,6 @@ import com.tu.bzahov.Exceptions.FullParkingException;
 import com.tu.bzahov.ParkingClasses.CarParking;
 import com.tu.bzahov.ParkingClasses.TruckParking;
 import com.tu.bzahov.VehicleClasses.Car;
-import com.tu.bzahov.VehicleClasses.MPS;
 import com.tu.bzahov.VehicleClasses.Truck;
 
 public class App {
@@ -16,9 +15,6 @@ public class App {
            System.out.println("Create Cars:");
                Car car  = new Car("BG1010BZ","a2ab8" ,2001);
                Car car2 = new Car("BG2020BZ","a1a5ab",2011);
-
-           System.out.println(car instanceof Car);
-           System.out.println(car instanceof MPS);
           // System.out.println(car instanceof Car);
 
            System.out.println("Create invalid Car:");
@@ -46,6 +42,9 @@ public class App {
                 TruckParking truckParking2 = new TruckParking(2,3);
 
            System.out.println("Add Truck at Truck Parking");
+                truckParking.park(truck);
+                truckParking.park(truck2);
+                truckParking.park(truck3);
 
 
        }catch (CarNotValidException | FullParkingException e){
