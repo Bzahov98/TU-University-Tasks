@@ -35,7 +35,9 @@ public abstract class Parking {
     }
 
     public void removeMPSbyData(String mpsData){
-
+        if (mpsList == null || mpsList.isEmpty()){
+            return;
+        }
         Iterator<MPS> i = mpsList.iterator();
         while (i.hasNext()) {
             MPS currentMPS = i.next(); // must be called before you can call i.remove()
