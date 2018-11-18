@@ -16,13 +16,13 @@ public class PropertyInquiry {
         this.townName = townName;
     }
 
-    public PropertyInquiry(int id, String currNameOwner, String newNameOwner, String townName, int numberOfRequest) {
+    /*public PropertyInquiry(int id, String currNameOwner, String newNameOwner, String townName, int numberOfRequest) {
         this.id = id;
         this.currNameOwner = currNameOwner;
         this.newNameOwner = newNameOwner;
         this.townName = townName;
         this.numberOfRequest = numberOfRequest;
-    }
+    }*/
 
     public int getId() {
         return id;
