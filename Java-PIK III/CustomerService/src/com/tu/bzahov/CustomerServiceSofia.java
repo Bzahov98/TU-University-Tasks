@@ -10,10 +10,10 @@ public class CustomerServiceSofia extends CustomerService {
         this.municipality = FIXED_TOWN;
     }
 
-    public static int addInquirySofia(PropertyInquiry newProperty) throws NullPointerException{
+    public static int addInquiry(PropertyInquiry newProperty) throws NullPointerException{
         if (newProperty.getTownName().equals(FIXED_TOWN)) {
             System.out.println("Matching towns");
-            addInquiry(newProperty);
+            CustomerService.addInquiry(newProperty);
         }else System.out.println("Towns don't match");
         //super.addInquiry(newProperty);
         return currentInputNum;
