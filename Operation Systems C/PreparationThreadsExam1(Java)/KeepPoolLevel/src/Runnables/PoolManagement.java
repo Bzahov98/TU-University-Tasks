@@ -34,11 +34,12 @@ public class PoolManagement {
         runnableList.stream().forEach(thread -> thread.start());
 
         int timeElapsed = 0;
-        while (timeElapsed < 10000){
+        while (timeElapsed < 1000){
             synchronized (poolMutex){
                 System.out.println("Time: "+timeElapsed+" -> Pool Capacity: "+ currentCapacity);
             }
             timeElapsed++;
+            sleep(400);
         }
         runnableList.stream().forEach(thread -> {
             try {
