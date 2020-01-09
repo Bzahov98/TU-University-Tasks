@@ -1,0 +1,2 @@
+>RouteName:route1,distance: 21.000000,dailyRepeat: 1>color:a,X: 1.000000,Y: 2.000000>color:b,X: 3.000000,Y: 4.000000>color:d,X: 1.000000,Y: 1.000000
+>RouteName:route2,distance: 99.000000,dailyRepeat: 9>color:z,X: 9.000000,Y:8.000000>color:x,X: 7.000000,Y: 6.000000>color:y,X: 5.000000,Y: 4.000000

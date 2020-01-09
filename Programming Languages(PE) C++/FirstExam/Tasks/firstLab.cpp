@@ -1,3 +1,7 @@
+//
+// Created by bzahov on 20.11.19 г..
+//
+
 #include <iostream>
 #include <math.h>
 using namespace std;
@@ -34,8 +38,8 @@ void triangle::show(char *name) //Дефиниция на член-функци�
     cout << "Sides of the triangle " << name << ":\n";
     cout << "a=" << a << ",b=" << b << ",c=" << c;
 }
-int _tmain()
-{
+
+int main(){
     triangle ob1; //Създаване на обект ob1 от клас triangle
     double s;
     s = ob1.face(); //Извиква се член-функция face() за обект ob1
@@ -49,3 +53,4 @@ int _tmain()
     cout << "\nThe face of triangle2 is s=" << s;
     return 0;
 }
+

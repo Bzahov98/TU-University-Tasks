@@ -1,0 +1,1 @@
+/usr/bin/c++  -g  -rdynamic "CMakeFiles/test.dir/TaxiRouteSystem(CourseWork)/test.cpp.o"  -o test 

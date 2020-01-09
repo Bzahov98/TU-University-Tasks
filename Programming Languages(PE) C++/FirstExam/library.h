@@ -1,0 +1,6 @@
+#ifndef FIRSTEXAM_LIBRARY_H
+#define FIRSTEXAM_LIBRARY_H
+
+void hello();
+
+#endif //FIRSTEXAM_LIBRARY_H

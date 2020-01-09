@@ -76,6 +76,7 @@ class Ocenki: public Student {
 ostream& operator << (ostream & stream, Ocenki & ob){
     //stream>>ob.getName;
         std::cout << "Not implement <<" << std::endl;
+        
     return stream;
 }
 

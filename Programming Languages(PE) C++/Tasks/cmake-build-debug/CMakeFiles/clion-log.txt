@@ -1,0 +1,4 @@
+/mnt/sda6/bobo/Programs/clion-2019.2.5/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/Tasks"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/Tasks/cmake-build-debug

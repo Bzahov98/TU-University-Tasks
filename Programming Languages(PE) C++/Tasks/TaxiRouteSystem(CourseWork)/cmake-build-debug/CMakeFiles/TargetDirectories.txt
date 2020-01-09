@@ -1,0 +1,3 @@
+/home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/Tasks/TaxiRouteSystem(CourseWork)/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/Tasks/TaxiRouteSystem(CourseWork)/cmake-build-debug/CMakeFiles/TaxiRouteSystem_CourseWork_.dir
+/home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/Tasks/TaxiRouteSystem(CourseWork)/cmake-build-debug/CMakeFiles/edit_cache.dir

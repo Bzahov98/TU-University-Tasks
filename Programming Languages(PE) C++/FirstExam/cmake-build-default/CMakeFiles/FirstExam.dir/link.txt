@@ -1,0 +1,2 @@
+/usr/bin/ar qc libFirstExam.a  CMakeFiles/FirstExam.dir/library.cpp.o CMakeFiles/FirstExam.dir/CalendarTask/Calendar.cpp.o CMakeFiles/FirstExam.dir/Tasks/firstLab.cpp.o
+/usr/bin/ranlib libFirstExam.a

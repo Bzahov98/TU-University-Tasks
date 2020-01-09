@@ -1,0 +1,4 @@
+/home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/Tasks/ExamPrep/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/Tasks/ExamPrep/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/Tasks/ExamPrep/cmake-build-debug/CMakeFiles/book.dir
+/home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/Tasks/ExamPrep/cmake-build-debug/CMakeFiles/point.dir

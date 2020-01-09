@@ -1,0 +1,5 @@
+>regNum: ca2134vd,brand: brandddr,model: brakma,seats: 3,fuelPerKm: 1.240000,yearsOfUse: 5
+>regNum: "",brand: brand1,model: model1,seats: 4,fuelPerKm: 1.500000,yearsOfUse: 21
+>regNum: "",brand: "",model: "",seats: 0,fuelPerKm: 0.000000,yearsOfUse: 0>regNum: ,brand: ,model: ,seats: 0,fuelPerKm: 0.000000,yearsOfUse0
+>regNum: ,brand: ,model: ,seats: 0,fuelPerKm: 0.000000,yearsOfUse0
+>regNum: NULL,brand: NULL,model: NULL,seats: 0,fuelPerKm: 0.000000,yearsOfUse0

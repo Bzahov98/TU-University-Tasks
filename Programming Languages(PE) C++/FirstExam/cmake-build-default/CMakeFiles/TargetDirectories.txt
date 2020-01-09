@@ -1,0 +1,3 @@
+/home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/FirstExam/cmake-build-default/CMakeFiles/rebuild_cache.dir
+/home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/FirstExam/cmake-build-default/CMakeFiles/FirstExam.dir
+/home/bzahov/Documents/gitRepos/TU-University-Tasks/Programming Languages(PE) C++/FirstExam/cmake-build-default/CMakeFiles/edit_cache.dir
