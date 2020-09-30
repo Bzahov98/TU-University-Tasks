@@ -5,9 +5,15 @@ Contents:-
 1)Algorithms(САА)/src/com/tu/bzahov/PrimeNumbersTask_B1
      a)Main.java
      b)PrimeNumbers.java
+     
+     
+     
 2)C- PIK I
      a)CorseWork 1
      b)sss.c
+     
+     
+     
 3)C- PIK II
      a)1.1
      b)2.1
@@ -32,10 +38,16 @@ Contents:-
 5)OIP I
      a)AutoCAD Tasks
      b)Canvas Task
+     
+     
 6)Operation System
      a)Files
      b)PreparationThreadsExam1(Java)
      c)Threads and Mutex
      d)controllMemory
+     
+     
 7)Programming Languages(PE) C++
+
+
 8)System Programming C
